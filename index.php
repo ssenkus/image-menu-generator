@@ -114,9 +114,6 @@ function generateCSS($menu_params) {
 
 	echo '</style>';
 }
-
-
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -176,4 +173,3 @@ function generateCSS($menu_params) {
 		<?php generateImagePreload($menu_params); ?>
 	</body>
 </html>
-
