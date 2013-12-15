@@ -1,6 +1,6 @@
 <?php
 require_once 'menu.class.php';
-$menu = new MenuGenerator();
+$menu = new MenuGenerator('food');
 ?>
 <!DOCTYPE html>
 <html>
@@ -12,7 +12,9 @@ $menu = new MenuGenerator();
     </head>
 
     <body>
+        
         <?php $menu->createMenu(); ?>
         <?php $menu->generateImagePreload(); ?>
+        
     </body>
 </html>

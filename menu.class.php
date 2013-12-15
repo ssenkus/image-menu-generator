@@ -3,20 +3,7 @@
 class MenuGenerator {
 
     public $menu_params = array();
-    public $genres;
-    public $menu_container;
-
-    public function __construct() {
-
-        $this->menu_params = array(
-            "width_main_img" => 600, // Width of the featured image, in px
-            "height_main_img" => 344, // Height of the featured image, in px 
-            "width_menubar" => 100, // Width of menu bars, in px
-            "num_menubars" => 10, // NOTE: Limit of 10 items from lorempixel.com placeholder image service
-        );
-        $this->menu_params["height_menubar"] = ceil($this->menu_params["height_main_img"] / $this->menu_params["num_menubars"]);
-
-        $this->genres = array(
+    public $genres = array(
             "abstract",
             "animals",
             "city",
@@ -29,9 +16,16 @@ class MenuGenerator {
             "technics",
             "transport"
         );
-        $this->menu_params["img_genre"] = $this->genres[10];
 
-
+    public function __construct($genre = null) {
+        $this->menu_params = array(
+            "width_main_img" => 600, // Width of the featured image, in px
+            "height_main_img" => 344, // Height of the featured image, in px 
+            "width_menubar" => 100, // Width of menu bars, in px
+            "num_menubars" => 10, // NOTE: Limit of 10 items from lorempixel.com placeholder image service
+        );
+        $this->menu_params["height_menubar"] = ceil($this->menu_params["height_main_img"] / $this->menu_params["num_menubars"]);
+        $this->menu_params["img_genre"] = (isset($genre)) ? $genre : $this->genres[10];
     }
 
     public function generateJS(){
@@ -98,6 +92,7 @@ SCRIPTS;
                 <a href="#"></a>
             </div>
         </div>
+                
 MENU;
     }
 
