@@ -2,34 +2,51 @@
 
 class MenuGenerator {
 
-    public $menu_params = array();
-    public $genres = array(
-            "abstract",
-            "animals",
-            "city",
-            "food",
-            "nightlife",
-            "fashion",
-            "people",
-            "nature",
-            "sports",
-            "technics",
-            "transport"
-        );
+    private $menu_params = array(
+        "width_main_img" => 600, // Width of the featured image, in px
+        "height_main_img" => 344, // Height of the featured image, in px 
+        "width_menubar" => 100, // Width of menu bars, in px
+        "num_menubars" => 4, // NOTE: Limit of 10 items from lorempixel.com placeholder image service
+    );
+    private $genres = array(
+        "abstract",
+        "animals",
+        "city",
+        "food",
+        "nightlife",
+        "fashion",
+        "people",
+        "nature",
+        "sports",
+        "technics",
+        "transport"
+    );
 
-    public function __construct($genre = null) {
-        $this->menu_params = array(
+    public function __construct($options = array(
+        'genre' => 'abstract',
+        'menu_params' => array(
             "width_main_img" => 600, // Width of the featured image, in px
-            "height_main_img" => 344, // Height of the featured image, in px 
+            "height_main_img" => 300, // Height of the featured image, in px 
             "width_menubar" => 100, // Width of menu bars, in px
             "num_menubars" => 10, // NOTE: Limit of 10 items from lorempixel.com placeholder image service
-        );
-        $this->menu_params["height_menubar"] = ceil($this->menu_params["height_main_img"] / $this->menu_params["num_menubars"]);
-        $this->menu_params["img_genre"] = (isset($genre)) ? $genre : $this->genres[10];
+        )
+    )) {
+        $this->menu_params = $options['menu_params'];
+        $this->menu_params["height_menubar"] = $this->calculateMenuBarHeight();
+        $this->menu_params["img_genre"] = $this->validateGenre($options['genre']);
     }
 
-    public function generateJS(){
-        
+    private function calculateMenuBarHeight() {
+        return $this->menu_params["height_menubar"] = ceil($this->menu_params["height_main_img"] / $this->menu_params["num_menubars"]);        
+    }
+    
+    private function validateGenre($genre) {
+        $genre_out = ( (isset($genre)) && (in_array($genre, $this->genres)) ) ? $genre : $this->genres[2];
+        return $genre_out;
+    }
+
+    public function generateJS() {
+
         $menu_params = $this->menu_params;
         echo <<<SCRIPTS
 
@@ -61,18 +78,14 @@ class MenuGenerator {
         </script>
         
 SCRIPTS;
-        
-        
     }
-    
-    
+
     // Output the HTML for the menu and image
     public function createMenu() {
-
-        $width = $this->menu_params['width_menubar'];
-        $height = $this->menu_params["height_menubar"];
-        $genre = $this->menu_params["img_genre"];
-        $num_menubars = $this->menu_params["num_menubars"];
+        extract($this->menu_params);
+        $width = $width_menubar;
+        $height = $height_menubar;
+        $genre = $img_genre;
 
         $list = '';
         for ($i = 1; $i <= $num_menubars; $i++) {
@@ -97,7 +110,7 @@ MENU;
     }
 
 // Insert list item image with link
-    public function createMenuBar($link, $img_src) {
+    private function createMenuBar($link, $img_src) {
         $list = <<<LIS
                 
                     <li class="menu_item"><a href="$link"><img src="$img_src" class="menu" /></a></li>
@@ -107,16 +120,9 @@ LIS;
 
 // preloads images for faster response
     public function generateImagePreload() {
-        $menu_params = $this->menu_params;
-        $height_main_img = $menu_params["height_main_img"];
-        $width_main_img = $menu_params["width_main_img"];
-        $height_menubar = $menu_params["height_menubar"];
-        $width_menubar = $menu_params["width_menubar"];
-        $num_of_menubars = $menu_params["num_menubars"];
-        $img_genre = $menu_params["img_genre"];
-
+        extract($this->menu_params);
         $out = '';
-        for ($i = 1; $i <= $num_of_menubars; $i++) {
+        for ($i = 1; $i <= $num_menubars; $i++) {
             $out .= <<<IMG
                     
             <img src="http://lorempixel.com/g/$width_menubar/$height_menubar/$img_genre/$i/$i" />
@@ -137,16 +143,10 @@ HIDDEN;
 
 // Outputs the CSS dimensions for the menu
     public function generateCSS() {
-        $menu_params = $this->menu_params;
-        $height_main_img = $menu_params["height_main_img"];
-        $width_main_img = $menu_params["width_main_img"];
-        $height_menubar = $menu_params["height_menubar"];
-        $width_menubar = $menu_params["width_menubar"];
-        $num_of_menubars = $menu_params["num_menubars"];
-
+        extract($this->menu_params);
         $total_height = $height_main_img;
         $total_width = $width_main_img + $width_menubar;
-        $margin = ((760 - $total_height) / 4);
+        $margin = ((860 - $total_height) / 4);
         echo <<<STYLES
         
         <style>
@@ -172,8 +172,8 @@ HIDDEN;
         </style>
         
 STYLES;
-        
     }
 
 }
+
 ?>
