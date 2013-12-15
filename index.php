@@ -1,121 +1,5 @@
 <?php
 
-class MenuGenerator {
-
-    public $menu_params;
-    public $genres;
-
-    public function __construct() {
-        $this->menu_params = array(
-            "width_main_img" => 600, // Width of the featured image, in px
-            "height_main_img" => 344, // Height of the featured image, in px 
-            "width_menubar" => 100, // Width of menu bars, in px
-            "num_menubars" => 10, // NOTE: Limit of 10 items from lorempixel.com placeholder image service
-        );
-
-        $this->genres = array(
-            "abstract",
-            "animals",
-            "city",
-            "food",
-            "nightlife",
-            "fashion",
-            "people",
-            "nature",
-            "sports",
-            "technics",
-            "transport"
-        );
-
-        $this->createMenu();
-    }
-    
-    // Output the HTML for the menu and image
-    public function createMenu() {
-
-        echo '<div id="menu-bar">';
-        echo '<ul>';
-
-
-        // An array of links can be used here to link to specific pages
-        for ($i = 1; $i <= $this->menu_params["num_menubars"]; $i++) {
-            $img_src = 'http://lorempixel.com/g/' . $this->menu_params["width_menubar"] . '/' . $this->menu_params["height_menubar"] . '/' . $this->menu_params["img_genre"] . '/' . $i . '/' . $i;
-            createMenuBar('#', $img_src, $i);
-        }
-
-        echo '</ul>';
-        echo '</div>';
-    }
-
-// Insert list item image with link
-    public function createMenuBar($link, $img_src, $i = 0) {
-        echo '<li><a href="' . $link . '"><img src="' . $img_src . '" class="menu" id="js_menu0' . $i
-        . '" onMouseOver="changeimage(' . $i . ', ' . $i . ');" onMouseOut="changeimageback(0, ' . $i . ')" /></a></li>';
-    }
-
-// preloads images for faster response
-    public function generateImagePreload($menu_params) {
-
-        $height_main_img = $menu_params["height_main_img"];
-        $width_main_img = $menu_params["width_main_img"];
-        $height_menubar = $menu_params["height_menubar"];
-        $width_menubar = $menu_params["width_menubar"];
-        $num_of_menubars = $menu_params["num_menubars"];
-        $img_genre = $menu_params["img_genre"];
-
-        $imgs = array();
-        for ($i = 1; $i <= $num_of_menubars; $i++) {
-            $imgs[] = 'http://lorempixel.com/g/' . $width_menubar . '/' . $height_menubar . '/' . $img_genre . '/' . $i . '/' . $i;   // grey menu bar image
-            $imgs[] = 'http://lorempixel.com/' . $width_menubar . '/' . $height_menubar . '/' . $img_genre . '/' . $i . '/' . $i;    // colored menu bar image
-            $imgs[] = 'http://lorempixel.com/' . $width_main_img . '/' . $height_main_img . '/' . $img_genre . '/' . $i . '/Image' . $i;  // colored main image
-        }
-
-        // Hides the images from view.  Useful for debugging.
-        echo '<div id="hidden">';
-        foreach ($imgs as $img) {
-            echo '<img src="' . $img . '" /><br />';
-        }
-        echo '</div>';
-    }
-
-// NEEDS IMPROVEMENT
-// Outputs the CSS dimensions for the menu
-    public function generateCSS($menu_params) {
-
-        $height_main_img = $menu_params["height_main_img"];
-        $width_main_img = $menu_params["width_main_img"];
-        $height_menubar = $menu_params["height_menubar"];
-        $width_menubar = $menu_params["width_menubar"];
-        $num_of_menubars = $menu_params["num_menubars"];
-
-        $total_height = $height_main_img;
-        $total_width = $width_main_img + $width_menubar;
-        echo '<style>';
-        echo '#wrapper {';
-        echo 'width: ' . $total_width . 'px;';
-        echo 'height: ' . $total_height . 'px;';
-        echo 'margin: ' . ((760 - $total_height) / 4) . 'px auto 0 auto;';
-        echo '}';
-
-        echo '.home-menu {';
-        echo 'background-image: URL(\'http://placebox.es/' . $width_main_img . '/' . $height_main_img . '/e4754f/ffffff/Default Image,25/\');';
-        echo 'width: ' . $width_main_img . 'px;';
-        echo 'height: ' . $height_main_img . 'px;';
-        echo '}';
-
-        echo 'li {';
-        echo 'height: ' . $height_menubar . 'px;';
-        echo '}';
-
-        echo '.menu {';
-        echo 'width: ' . $width_menubar . 'px;';
-
-        echo '</style>';
-    }
-
-
-
-}
 
 /* Menu Generator - with dummy pictures! */
 
@@ -280,12 +164,12 @@ function generateCSS($menu_params) {
         <div id="wrapper">
 
             <!-- Swap createMenu() and div#home-menu to move menu to the left -->
-<?php createMenu($menu_params); ?>
+<?php $menu->createMenu($menu_params); ?>
             <div id="home-menu" class="home-menu">
                 <a href="#"></a>
             </div>
         </div>
 
-<?php generateImagePreload($menu_params); ?>
+<?php $menu->generateImagePreload(); ?>
     </body>
 </html>
